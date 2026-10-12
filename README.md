@@ -342,3 +342,8 @@ no claim in the paper rests on it.
 
 Code MIT. Tabulated data CC BY 4.0. The digitised spectra are digitisations
 of published figures, not the original authors' data -- see spectra/PROVENANCE.md.
+
+## AI Disclosure 
+
+The python and C++ codes are largely generated using Claude Opus 5
+(Anthropic). The code has been reviewed, tested and verified. 
