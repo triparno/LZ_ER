@@ -47,7 +47,12 @@ producing the library -- see the note at the end of this section.
 
 This produces `build/libNESTCore.a`. The drivers link against it.
 
-Keep the NEST tree clean: nothing from this archive goes into it. 
+Keep the NEST tree clean: nothing from this archive goes into it. If a
+previous attempt added driver sources or `add_executable` targets there, plain
+`make` will build them too and die on `NEST.hh` before the library is
+produced, which makes the failure look like a problem with NEST. Restore
+`CMakeLists.txt`, remove the added sources, and delete `build/` before
+re-running cmake -- the cache remembers the targets until you do.
 
 ## 3. Build the drivers
 
@@ -75,6 +80,30 @@ the flags CMake itself used:
 
 `flags.make` is written by CMake's Makefile generator and holds the exact
 include flags NEST compiled itself with, vendored dependencies included.
+
+### Do not add them as CMake targets
+
+Do not copy the drivers into `examples/`, add `add_executable` targets and
+link `NEST`. It fails twice over.
+
+The headers are not found, because `target_link_libraries(... NEST)` brings in
+include directories only if the target exports them as `PUBLIC` or
+`INTERFACE`, and at this commit it does not:
+
+    fatal error: NEST.hh: No such file or directory
+
+And the target name is wrong anyway: at this commit the library is
+`NESTCore`, not `NEST`.
+
+Worse, once those targets are in NEST's own `CMakeLists.txt`, a plain `make`
+intended to build NEST tries to build them too, fails on `NEST.hh`, and stops
+before producing the library -- so section 2 breaks as well, and the error
+points at a driver source file rather than at the added target. Section 2 has
+the recovery steps.
+
+Compiling the drivers separately, as above, avoids all of this. They are three
+single translation units with one dependency; they do not need a build
+system.
 
 ## 4. Check it works
 
@@ -120,9 +149,21 @@ From this directory, where section 3 left the binaries:
 
 The first argument is the number of parallel processes, the second the driver.
 About two hours on eight cores for 1.084e10 trials across 24 energies. The
-script writes `../scan/scan24_results.txt` directly, replacing the archived
-copy, and anchors that path on its own location rather than the working
-directory.
+script writes `../scan/scan24_results.txt`, anchoring that path on its own
+location rather than the working directory.
+
+It replaces the archived copy only if the run validates. It checks the exit
+status of every parallel job, and then that the output carries exactly the 24
+energies of the job list with none missing or repeated, that every row has its
+full thirteen fields, that every field is a finite number, and that the trial
+count each row reports is the one that row was given. On any failure the
+archived file is left as it was and the candidate is kept beside it, named in
+the error. `validate_scan.sh` holds those checks and `run_scan24_smeared.sh`
+uses the same ones against its twenty columns.
+
+To satisfy yourself the guards work, `./test_runner_guards.sh` drives the
+runner with stub drivers that fail in each of those ways and asserts it
+refuses them all. It needs no NEST build and runs in a second.
 
 **The run is deterministic.** run_scan24.sh fixes seeds 201-224 and NEST's
 `RandomGen` is a singleton with a deterministic initial state, so a rerun

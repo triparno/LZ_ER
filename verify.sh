@@ -43,6 +43,9 @@ for f in *.py; do
     PRIVATE="$PRIVATE $f"
   fi
 done
+for f in ../nest-drivers/validate_scan.sh ../nest-drivers/test_runner_guards.sh; do
+  [ -f "$f" ] || MISS="$MISS ${f#../}"
+done
 if [ -n "$MISS" ] || [ -n "$STALE" ] || [ -n "$PRIVATE" ]; then
   echo
   [ -n "$MISS" ]    && echo "MISSING from analysis/:$MISS"
@@ -77,6 +80,17 @@ run () {                     # run <label> <script> [args...]
   fi
 }
 
+runsh () {                   # runsh <label> <script> [args...] -- bash, not python
+  local lbl="$1"; shift
+  printf '  %-26s ' "$lbl"
+  if out=$(timeout 900 bash "$@" 2>&1); then
+    printf 'ok\n'; PASS=$((PASS+1))
+  else
+    printf 'FAILED\n'; FAILED="$FAILED $lbl"
+    printf '%s\n' "$out" | tail -15 | sed 's/^/      | /'
+  fi
+}
+
 echo
 echo "the two checks that can fail:"
 run "manuscript vs code"  check_manuscript.py
@@ -100,6 +114,10 @@ run "double-vacancy modes" double_vacancy.py
 [ -f ../scan/scan24_smeared.txt ] \
   && run "measured smearing" read_smeared_scan.py \
   || echo "  measured smearing          skipped (no scan/scan24_smeared.txt)"
+
+echo
+echo "the scan runner's guards:"
+runsh "runner refuses bad scans" ../nest-drivers/test_runner_guards.sh
 
 if [ "$FIGS" = "--figures" ]; then
   echo

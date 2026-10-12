@@ -26,7 +26,8 @@
 # calls GetS1/GetS2 for events near a cut boundary, and at a leakage of ~1e-7
 # almost none are. The n_slow column reports how many took the slow path.
 
-set -u
+set -u -o pipefail
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/validate_scan.sh"
 BIN="${LZ_S1S2_BIN:-${2:-./lz_scan_s1s2}}"
 JOBS=${1:-8}
 S1C_IDX=${3:-}
@@ -35,7 +36,8 @@ S2C_IDX=${4:-}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT="$HERE/../scan/scan24_smeared.txt"
 TMP="$(mktemp "${OUT}.XXXXXX")"
-trap 'rm -f "$TMP"' EXIT
+EXPECT="$(mktemp)"
+trap 'rm -f "$TMP" "$TMP.s" "$EXPECT"' EXIT
 
 if [ ! -x "$BIN" ]; then
   echo "error: $BIN not found or not executable" >&2; exit 1
@@ -85,21 +87,29 @@ printf '#%6s %8s %7s %9s %8s %7s %12s %7s %11s %10s %6s %11s %10s %9s %11s %10s 
   n_ceil P_ceil dP_ceil n_win P_win dP_win \
   n_ceil_s P_ceil_s dP_ceil_s n_win_s P_win_s dP_win_s n_slow > "$TMP"
 
-echo "$JOBLIST" | awk 'NF==3' \
-  | xargs -P "$JOBS" -L1 bash -c \
-      '"'"$BIN"'" $0 $1 $2 '"$S1C_IDX $S2C_IDX" >> "$TMP"
+printf '%s\n' "$JOBLIST" | awk 'NF==3 {print $1, $2}' > "$EXPECT"
 
-rows=$(grep -vc '^#' "$TMP")
-if [ "$rows" -ne 24 ]; then
-  echo "ERROR: $rows data rows, expected 24. $OUT left unchanged;" \
-       "partial output in $TMP" >&2
-  trap - EXIT
+# Every job's exit status matters: xargs returns non-zero if any invocation
+# did, and a driver that fails can still have printed a plausible line.
+if ! printf '%s\n' "$JOBLIST" | awk 'NF==3' \
+     | xargs -P "$JOBS" -L1 bash -c \
+         '"'"$BIN"'" $0 $1 $2 '"$S1C_IDX $S2C_IDX" >> "$TMP"; then
+  echo "ERROR: at least one scan job exited non-zero." >&2
+  echo "       $OUT left unchanged; partial output kept at $TMP" >&2
+  trap 'rm -f "$EXPECT"' EXIT
   exit 1
 fi
 
-# sort the data rows by energy, keeping the header first (on TMP, not OUT)
+if ! validate_scan "$TMP" 20 "$EXPECT"; then
+  echo "ERROR: the scan output did not validate (above)." >&2
+  echo "       $OUT left unchanged; output kept at $TMP" >&2
+  trap 'rm -f "$EXPECT"' EXIT
+  exit 1
+fi
+
+# Only now is the committed scan replaced.
 { head -1 "$TMP"; tail -n +2 "$TMP" | sort -g -k1,1; } > "$TMP.s" && mv "$TMP.s" "$TMP"
-mv "$TMP" "$OUT"; trap - EXIT
+mv "$TMP" "$OUT"; trap 'rm -f "$EXPECT"' EXIT
 
 echo "wrote $OUT"
 if command -v column >/dev/null 2>&1; then column -t < "$OUT"; else cat "$OUT"; fi

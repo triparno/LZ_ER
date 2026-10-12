@@ -16,7 +16,8 @@
 # P(window) is deliberately under-sampled, the edge is set by kinematics
 # (Nq - 5435 < Ne < 409), not measured.
 
-set -u
+set -u -o pipefail
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/validate_scan.sh"
 # Path to the compiled driver. Override with LZ_SCAN_BIN or the second argument.
 BIN="${LZ_SCAN_BIN:-${2:-./lz_scan}}"
 JOBS=${1:-8}
@@ -24,7 +25,8 @@ JOBS=${1:-8}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT="$HERE/../scan/scan24_results.txt"
 TMP="$(mktemp "${OUT}.XXXXXX")"
-trap 'rm -f "$TMP"' EXIT
+EXPECT="$(mktemp)"
+trap 'rm -f "$TMP" "$TMP.s" "$EXPECT"' EXIT
 
 read -r -d '' JOBLIST << 'EOJ'
 45      307000000  201
@@ -58,17 +60,27 @@ if [ ! -x "$BIN" ]; then echo "error: $BIN not found or not executable" >&2; exi
 printf '#%6s %8s %7s %9s %8s %7s %12s %7s %11s %10s %6s %11s %10s\n' \
   E Nq NexNi meanNe sdNe skewNe N n_ceil P_ceil dP_ceil n_win P_win dP_win > "$TMP"
 
-echo "$JOBLIST" | awk 'NF==3' \
-  | xargs -P "$JOBS" -L1 bash -c '"'"$BIN"'" $0 $1 $2' >> "$TMP"
+printf '%s\n' "$JOBLIST" | awk 'NF==3 {print $1, $2}' > "$EXPECT"
 
-rows=$(grep -vc '^#' "$TMP")
-if [ "$rows" -ne 24 ]; then
-  echo "ERROR: $rows data rows, expected 24. $OUT left unchanged; partial output in $TMP" >&2
-  trap - EXIT
+# Every job's exit status matters: xargs returns non-zero if any invocation
+# did, and a driver that fails can still have printed a plausible line.
+if ! printf '%s\n' "$JOBLIST" | awk 'NF==3' \
+     | xargs -P "$JOBS" -L1 bash -c '"'"$BIN"'" $0 $1 $2' >> "$TMP"; then
+  echo "ERROR: at least one scan job exited non-zero." >&2
+  echo "       $OUT left unchanged; partial output kept at $TMP" >&2
+  trap 'rm -f "$EXPECT"' EXIT
   exit 1
 fi
-# sort the data rows by energy, keeping the header first (on TMP, not OUT)
+
+if ! validate_scan "$TMP" 13 "$EXPECT"; then
+  echo "ERROR: the scan output did not validate (above)." >&2
+  echo "       $OUT left unchanged; output kept at $TMP" >&2
+  trap 'rm -f "$EXPECT"' EXIT
+  exit 1
+fi
+
+# Only now is the committed scan replaced.
 { head -1 "$TMP"; tail -n +2 "$TMP" | sort -g -k1,1; } > "$TMP.s" && mv "$TMP.s" "$TMP"
-mv "$TMP" "$OUT"; trap - EXIT
+mv "$TMP" "$OUT"; trap 'rm -f "$EXPECT"' EXIT
 echo "wrote $OUT"
 if command -v column >/dev/null 2>&1; then column -t < "$OUT"; else cat "$OUT"; fi

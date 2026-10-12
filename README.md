@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/1415618232.svg)](https://doi.org/10.5281/zenodo.23318901)
+
 # Reproduction archive
 
 Code and derived data for "The Electron-Recoil Response Tail and the LZ
@@ -36,8 +38,9 @@ needed to re-extract the CSVs from the source figures.
 ## Layout
 
     nest-drivers/   C++ drivers against the LZ detector configuration
-                    (build.sh compiles them; HOWTO.md is the step-by-step
-                    build and run guide)
+                    (build.sh compiles them, HOWTO.md is the step-by-step
+                    build and run guide, validate_scan.sh is the output check
+                    the two runners share)
     scan/           the 24-point leakage scan: the one expensive artefact
     analysis/       verification, family construction, thresholds, figures
     spectra/        digitised beta spectra and the digitisation code
@@ -50,9 +53,9 @@ needed to re-extract the CSVs from the source figures.
     ./verify.sh --figures    # and regenerate the figures
 
 Runs every consistency check and prints a summary; exits non-zero if anything
-disagrees. Nothing here needs NEST -- the scan output is committed. Nineteen
-checks (sixteen plus three figures), of which four can fail rather than merely
-compute:
+disagrees. Nothing here needs NEST -- the scan output is committed. Twenty
+checks (seventeen plus three figures), of which five can fail rather than
+merely compute:
 
   check_manuscript.py reads paper/main.tex and paper/supplementary.tex, pulls
   every table and the headline scalars out of them, recomputes each from the
@@ -78,6 +81,12 @@ compute:
 
   window_ratio.py rebuilds every family member at every energy across the
   parent window, which takes about two minutes and is the slowest check.
+
+  test_runner_guards.sh drives run_scan24.sh with stub drivers that fail in
+  each way a real one could, and asserts that the runner refuses every one of
+  them and leaves the committed scan untouched. The scan is the only artefact
+  here that costs hours, so the runner must not be able to replace a good file
+  with a bad one.
 
 verify.sh begins with a preflight that refuses to run on a partial or
 inconsistent tree. It requires every script to import response.py, and it
@@ -165,6 +174,14 @@ member). Only the scan in step 1 requires hours.
                      P 8.3e-4 / 2.8e-2 / 7.7e-2, Gaussian-equivalent 3.1/1.9/1.4
     numerical floor  kappa = 2 against the response it should equal gives
                      D = 2.1e-10, i.e. N = 2.1e10, 2e4 times the ceiling
+
+A rerun replaces the committed scan only if it validates. The runner checks
+the exit status of every parallel job, then that the output carries exactly
+the 24 energies of the job list with none missing or duplicated, that every
+row has its full complement of fields, that every field is a finite number,
+and that the trial count each row reports is the one that row was asked for.
+Any failure leaves scan24_results.txt as it was and keeps the candidate
+alongside it for inspection. The same checks guard the smeared runner.
 
 The scan is deterministic: run_scan24.sh fixes seeds 201-224 and NEST's
 generator is a singleton, so a rerun reproduces these numbers exactly rather
