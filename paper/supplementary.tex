@@ -1,0 +1,379 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,hyperref,siunitx,cleveref}
+\usepackage[T1]{fontenc}
+\usepackage[dvipsnames]{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{authblk}
+
+\author[1]{Triparno Bandyopadhyay}
+\author[2]{Rajarajeswari Ramasamy}
+\author[2]{Nishitha TP}
+
+\affil[1]{Nayanta University, Bavdhan, Pune 411021, Maharashtra, India.}
+\affil[2]{Department of Physics and Nanotechnology, SRM Institute of
+Science and Technology, Kattankulathur, Tamil Nadu 603203, India.}
+
+\title{Supplementary notes to \\
+\emph{Background Expectation for the
+LZ High-Energy Event}}
+\date{\today}
+
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\newcommand{\keVee}{\ensuremath{\mathrm{keV_{ee}}}}
+\begin{document}
+\maketitle
+
+\noindent
+These notes collect material that was developed in the course of the
+analysis and is not needed to follow its argument. None of it bears on
+the central result, which is that the published characterisation of the
+electron-recoil response does not determine the tail probability on which
+the background expectation depends. We record it because each item either
+answers a question a reader may reasonably ask of the main text, or
+documents a calculation whose conclusion is quoted there without its
+derivation. Section and equation numbers of the main text are referred to
+as they appear there.
+
+\section{Contours of constant \(N_q\) in the observable plane}
+\label{sup:geom}
+
+Recombination conserves \(N_q\), so it displaces an event along a contour
+of constant total quanta. Since \(\mathrm{S1c}=g_1N_{ph}\) and
+\(\mathrm{S2c}=g_2N_e\), that contour is
+\begin{align}
+    \label{eq:locus}
+    \frac{\mathrm{S1c}}{g_1}+\frac{\mathrm{S2c}}{g_2}=N_q
+    \qquad\Longleftrightarrow\qquad
+    \mathrm{S2c}=g_2\!\left(N_q-\frac{\mathrm{S1c}}{g_1}\right),
+\end{align}
+a straight line of slope \(-g_2/g_1=-312.5\) in the
+\(\{\mathrm{S1c},\mathrm{S2c}\}\) plane. In the
+\(\{\mathrm{S1c},\log_{10}\mathrm{S2c}\}\) plane in which the bands are
+drawn, the same locus is \(\log_{10}[g_2(N_q-\mathrm{S1c}/g_1)]\), a curve
+whose local slope
+\begin{align}
+    \label{eq:locusslope}
+    \frac{\mathrm{d}\log_{10}\mathrm{S2c}}{\mathrm{d}\,\mathrm{S1c}}
+    =-\frac{g_2/g_1}{\ln 10\;\mathrm{S2c}}
+\end{align}
+steepens from \(-0.0032\)~dex/phd at the nominal recombination of a
+parent of \(69.84\)~\keVee to \(-0.0148\)~dex/phd at the event, and
+diverges as \(\mathrm{S1c}\to g_1N_q\). These loci are the
+contours of constant energy drawn in grey in Figs.~2 and~4 of the Letter,
+where their curvature is directly visible.
+
+The distinction matters when a vertical separation is read off the band.
+The bands of the Letter are evaluated taking flat energy spectra along
+lines of fixed \(\mathrm{S1c}\), so the reference population at fixed
+\(\mathrm{S1c}\) spans many parent energies: at
+\(\mathrm{S1c}=540\)~phd the band median corresponds to a parent of
+\(89.8\)~\keVee rather than the \(69.84\)~\keVee of the event
+inversion. A vertical displacement therefore mixes recombination with
+parent energy, whereas a displacement along \cref{eq:locus} isolates
+recombination at fixed \(N_q\). The inference of the Letter is a
+two-dimensional unbinned profile likelihood ratio and uses neither
+projection; we record the distinction because the vertical separation is
+quoted elsewhere as a measure of separation from electron-recoil
+backgrounds.
+
+\section{The low-energy edge of the acceptance}
+\label{sup:floor}
+
+The main text adopts \(0.62\)~\keVee for the lower edge of the
+electron-recoil acceptance of the WS RoI and states that three plausible
+treatments span \(2.2\%\) in the acceptance width. The derivation is as
+follows.
+
+The ceiling is obtained by solving \(Q_y(E)\,E=409.5\) with the tuned
+charge-yield model, giving \(20.02\)~\keVee at
+\(Q_y=20.46\)~e\(^-\)/keV. The floor cannot be obtained that way, for two
+reasons.
+
+First, the yield parameterisation is not usable at sub-keV energies.
+Charge yield is bounded above by the case in which no ion recombines,
+\begin{align}
+    \label{eq:qymax}
+    Q_y^{\max}=\frac{1}{W\,(1+N_{ex}/N_i)}=62.6~\mathrm{e^-/keV},
+\end{align}
+whereas the tuned model tends to \(C\,m_2=85.3\)~e\(^-\)/keV as
+\(E\to0\), that is \(m_2=84.9\)~e\(^-\)/keV before the density correction
+\(C=1.0051\), exceeding the ceiling by \(36\%\). The two cross at
+\(E=0.97~\mathrm{keV_{ee}}\):
+
+\begin{center}
+\begin{tabular}{rrrrc}
+\toprule
+\(E\) [keV] & \(Q_y(E)\) & \(N_e=Q_yE\) & \(N_i=E/[W(1+N_{ex}/N_i)]\) & \(N_e>N_i\)?\\
+\midrule
+0.193 & 84.6 &  16.3 &   12.1 & yes\\
+0.26  & 82.9 &  21.6 &   16.3 & yes\\
+0.50  & 78.0 &  39.0 &   31.3 & yes\\
+1.0   & 70.6 &  70.6 &   62.6 & marginal\\
+5.0   & 44.1 & 220   &  313   & no\\
+20.0  & 20.5 & 409   & 1251   & no\\
+70.0  & 17.7 & 1237  & 4379   & no\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Below about \(1\)~\keVee the parameterisation returns more
+electrons than there are ions, and is being used outside the range over
+which it was tuned.
+
+Second, the WS RoI is three cuts rather than one. Taking them together,
+\(\mathrm{S1c}>3\)~phd requires \(N_{ph}>27.2\) and
+\(\mathrm{S2}>645\)~phd requires \(N_e>18.7\) --- the latter binding more
+tightly than the S2c floor's \(16.3\) --- so \(N_q>45.9\) and
+\(E>0.62~\mathrm{keV_{ee}}\). At that \(N_q\) one has \(N_i=38.9\) and
+\(N_{ex}=7.0\), and the two requirements can be met only for
+\(r\simeq0.52\), whereas the capped model gives full ionisation there and
+\(\mathrm{S1c}=0.78\)~phd. Sub-keV electron recoils therefore enter the
+RoI only on a recombination fraction well above the value the capped model
+returns, and \(0.62\)~\keVee is a boundary of the acceptance rather
+than a threshold that typical events cross.
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+treatment & floor [\keVee] & width [\keVee]\\
+\midrule
+S2c cut alone, uncapped yield   & 0.193 & 19.80\\
+S2c cut alone, full ionisation  & 0.261 & 19.73\\
+all three cuts jointly          & 0.621 & 19.37\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The spread in \(\mathrm{d}N/\mathrm{d}E\) across the three is
+\(2.2\%\). The first is listed only to show what the parameterisation
+returns if its sub-keV extrapolation is taken at face value; discarding it
+leaves \(1.9\%\).
+
+\section{Bounds on the width-variation sensitivity}
+\label{sup:width}
+
+The main text notes that a width known to better than \(+6.2\%\) would
+keep the within-family contribution below a tenth of the quoted
+background, and that \(+16.6\%\) is where it reaches the whole of it. The corresponding bounds, obtained by folding the varied
+response through the parent spectrum, are
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+if \(\sigma_{N_e}\) is high by at most & \(N^{\mathrm{ER}}_{\mathrm{leak}}\) below & fraction of \(0.0106\)\\
+\midrule
+\(+2\%\)  & \(3.4\times10^{-4}\) & \(3\%\)\\
+\(+5\%\)  & \(7.8\times10^{-4}\) & \(7\%\)\\
+\(+10\%\) & \(2.7\times10^{-3}\) & \(25\%\)\\
+\(+16\%\) & \(9.5\times10^{-3}\) & \(90\%\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Only upward variations are tabulated; downward variations reduce
+the leakage, so these are the conservative side. These bounds constrain
+the within-family sensitivity alone. They do not bear on the
+identifiability result of the main text, every member of whose families
+carries the same \(\sigma_{N_e}\).
+
+\section{The double-vacancy populations}
+\label{sup:dec}
+
+The Letter identifies the \(^{124}\)Xe and \(^{125}\)I double-vacancy
+decays as the populations whose projection into the tail carries a
+systematic it does not propagate. We examined both externally. An external
+reconstruction of these populations rests on extrapolations that no
+published measurement constrains, and what follows establishes two bounds
+and one non-identifiability rather than a determination of the response.
+That is why it is recorded here and not in the main text.
+
+These decays produce more light and less charge than equivalent-energy
+\(\beta\) decays because the energy is distributed among multiple
+low-energy Auger--Meitner electrons, raising the ionisation density and
+hence recombination~\cite{Recomb}.
+
+\paragraph{\(^{124}\)Xe.} With \(T_{1/2}=1.09\times10^{22}\)~yr and a KK
+fraction of \(64.8\%\) from the collaboration's own
+measurement~\cite{Xe124}, the exposure contains \(787\) \(2\nu\)DEC
+decays, of which \(510\) are KK captures at \(64.3\)~keV. The rate
+calculation can be checked against the same paper's statement that
+\(2.3\%\) of the signal lies below the region of interest of that
+analysis: that fraction gives \(18\) events against the \(21.0\pm6.3\) of
+Table~I of the Letter.
+
+The KK mode is not strongly charge-suppressed. In \(88\%\) of K-captures a
+\(28\)~keV X-ray carries energy \(\mathcal{O}(100)~\mu\)m from the primary
+site~\cite{Recomb}, so the deposit comprises three independent
+recombination sites. Only the both-Auger channel,
+\((1-f_K)^2\simeq1.6\%\) or \(\sim\!7\) events, with \(f_K\) the K-shell
+fluorescence yield, is a single dense deposit; with the measured box-size
+ratio \(a_{\rm L}/a_\beta=0.84\pm0.03\) in the Thomas--Imel
+framework~\cite{ThomasImel,Recomb} this gives
+\(Q_y/Q_y^\beta\geq0.774\) and a contribution of \(5\times10^{-5}\)
+counts. This contribution is negligible.
+
+Taking \(a_{\rm KK}\geq a_{\rm L}\) is the conservative choice. Scaling
+the box size with the electron range would give substantially larger
+suppression and is not supported by the data: the measured
+\(a_{\rm L}/a_\beta=0.84\) corresponds to a range ratio of \(0.10\), so
+the box size is far less sensitive to track structure than the range. The
+KK double-Auger cascade is moreover dominated by \(\sim\!23\)~keV KLL
+electrons, which are more \(\beta\)-like than the sub-keV L cascade.
+
+\paragraph{\(^{125}\)I.} The mechanism is the Letter's own: its Fig.~4
+caption records that the spectral features in the ER band above
+\(25\)~\keVee come predominantly from \(^{125}\)I and
+\(^{133}\)Xe and appear slightly below the \(\beta\)-decay ER band due to
+increased recombination from Auger cascades.
+
+\(^{125}\)I decays by electron capture to \(^{125}\)Te, followed by a
+\(35.49\)~keV nuclear transition internally converted in \(93\%\) of
+decays. That energy lies just above the xenon K edge at
+\(34.56\)~keV~\cite{XCOM}, where the mean free path is
+\(\simeq0.14\)~mm, so it deposits locally in essentially every decay and
+produces a second vacancy; the capture-shell label refers to the first
+vacancy only. The K, L and M modes deposit \(67.3\), \(40.4\) and
+\(36.5\)~keV, all above the \(20.02\)~\keVee at which a
+mean-recombination electron recoil meets the S2c ceiling. The
+\(8.9\pm2.7\) \(^{125}\)I events of Table~I therefore cannot be ordinary
+electron recoils of the corresponding energies: they are a population
+whose \emph{mean} charge yield is suppressed.
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+shell & \(Q_y/Q_y^\beta\) & \(\langle N_e\rangle\) & \(\sigma_{N_e}\) &
+\((\langle N_e\rangle-409.5)/\sigma_{N_e}\) & \(P(N_e\le409)\)\\
+\midrule
+K & 0.773 & 916 & 194 & 2.61 & \(8.3\times10^{-4}\)\\
+L & 0.783 & 562 &  99 & 1.54 & \(2.8\times10^{-2}\)\\
+M & 0.785 & 517 &  87 & 1.24 & \(7.7\times10^{-2}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Here
+\(\langle N_e\rangle=(Q_y/Q_y^\beta)\,Q_y(E)\,E\) is evaluated at each
+mode's own energy, and \(\sigma_{N_e}\) is the full width including the
+binomial term, with \(\omega\) taken from Eq.~4 of the Supplement at that
+\(N_q\): it is not a constant, falling from \(0.0456\) at \(N_q=4973\) to
+\(0.0369\) at \(N_q=2697\). The implied recombination fractions,
+\(1-\langle N_e\rangle/N_i\), are \(0.783\), \(0.778\) and \(0.774\);
+these are not the \(Q_y/Q_y^\beta\) ratios, which they resemble
+numerically and order in the opposite sense, and each exceeds the nominal
+\(\bar{r}\) at that energy by the double-vacancy enhancement. The Gaussian-equivalent
+displacements \(\Phi^{-1}(1-P)\) are \(3.1\), \(1.9\) and \(1.4\), larger
+than \((\langle N_e\rangle-409.5)/\sigma_{N_e}\) because the distribution is
+positively skewed and its low-side tail correspondingly thinner than
+Gaussian.
+
+It is important not to overstate this. The L and M modes reach the WS RoI
+through \(1.9\) and \(1.4\) Gaussian-equivalent standard deviations,
+probabilities of order \(10^{-2}\) to \(10^{-1}\); they are not a probe of
+the \(P\simeq10^{-7}\) regime that governs the ordinary electron-recoil
+leakage. What places them in the search region is the shift of the mean,
+not a rare fluctuation. Only the K mode, at \(3.1\), approaches the
+displacement at issue, and only its S1c interval brackets the event at
+\(540.1\)~phd: \(\mathrm{S1c}>504\)~phd follows from \(N_e\le409\), and
+\(\mathrm{S1c}<549\)~phd from \(N_e\geq0\), that is
+\(\mathrm{S1c}\leq N_qg_1\). The L and M modes, at \(N_q=2988\) and
+\(2697\), land at \(\mathrm{S1c}\simeq285\)--\(330\) and
+\(253\)--\(298\)~phd, inside the WS RoI but well outside the comparison
+region. Weighted by capture fraction they supply \(\sim\!92\%\) of the
+\(^{125}\)I population in the WS RoI and the K mode the remaining
+\(8\%\) --- not because the K mode is absent from its S1c range, but
+because reaching the ceiling from a mean of \(916\) demands a much larger
+downward fluctuation than the L and M modes require from \(562\) and
+\(517\). The implied total is \(\sim\!10^{3}\) decays.
+
+The size of the K-mode population is not recoverable from outside, and the
+sensitivity runs parallel to the identifiability result of the main text.
+Assigning the L mode the single-vacancy L-capture ratio measured in
+Ref.~\cite{Recomb} (\(0.877\)) rather than the double-vacancy treatment
+moves the fraction above \(\mathrm{S1c}=504\)~phd from \(8\%\) to
+\(82\%\), and the inferred total \(^{125}\)I decay count by an order of
+magnitude. Neither assignment is a measurement of the \(^{125}\)I
+response. In the absence of a measured double-vacancy response
+distribution, modelling choices available externally change the inferred
+population in the event's S1c region by a factor of ten --- which is the
+regime in which Ref.~\cite{Recomb} states that the Thomas--Imel framework
+cannot predict the size of the effect a priori.
+
+
+\section{An attempted reconstruction of the published band}
+\label{sup:band}
+
+Figure~2 of the Letter draws the electron-recoil band as ``the calibrated
+NEST model, taking flat energy spectra and evaluating along lines of fixed
+S1c''. We implemented that construction, in order to express the deviations
+of \cref{sup:geom} against the published band rather than against the
+response at a single energy, and did not succeed. We record the attempt
+because the main text's quantities are defined at fixed energy partly in
+consequence.
+
+At fixed \(\mathrm{S1c}\) the photon number is fixed, and since
+recombination conserves quanta, \(N_q=N_{ph}+N_e\). For a flat energy
+spectrum the constraint collapses the energy integral exactly,
+\begin{align}
+    \label{eq:bandcollapse}
+    p(N_e\,|\,N_{ph})\;\propto\;\int\!\mathrm{d}E\;f_E(N_e)\,
+    \delta\!\left(\tfrac{E}{W}-N_{ph}-N_e\right)
+    \;=\;W\,f_{E^\ast}(N_e),\qquad E^\ast=(N_{ph}+N_e)\,W,
+\end{align}
+so each \(N_e\) is evaluated at the one energy that makes the quanta add up.
+
+The reconstruction reproduces the published \emph{median} to better than
+\(0.011\) in \(\log_{10}\mathrm{S2c}\) at every \(\mathrm{S1c}\), and two
+independent digitisations of the figure agree with one another to
+\(\sim\!0.005\). The \emph{width} does not reproduce:
+
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+\(\mathrm{S1c}\) [phd] & \(E\) at the median [\keVee] &
+published \(10\)--\(90\%\) [dex] & reconstructed & ratio\\
+\midrule
+100 & 17 & 0.134 & 0.148 & 0.91\\
+200 & 33 & 0.159 & 0.177 & 0.90\\
+300 & 48 & 0.172 & 0.214 & 0.81\\
+500 & 82 & 0.230 & 0.291 & 0.79\\
+540 & 90 & 0.246 & 0.301 & 0.82\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The disagreement is about \(10\%\) at \(17\)~\keVee
+and \(20\%\) above \(48\), with the step falling where the electron-recoil
+calibration of Ref.~\cite{WS2024} ends. Two candidate causes sit inside our
+own assumptions and we cannot separate them from public information. The
+range of the ``flat energy spectra'' is not stated; truncating it at
+\(\sim\!100\)~\keVee reproduces the published width at
+\(\mathrm{S1c}=540\) almost exactly, \(0.250\) against \(0.246\), while
+changing nothing below \(\mathrm{S1c}=400\), so a residual \(10\%\) persists
+at low \(\mathrm{S1c}\) that the truncation does not touch. Effects we omit
+--- Fano smearing of \(N_q\) and the binomial draw of \(N_i\) --- would widen
+our band further and so cannot account for the gap, but the unknown
+truncation narrows it, and no claim can be made in either direction.
+
+Two things this does \emph{not} indicate. The reconstruction of the response
+model itself is verified independently: across the 24 scan energies it
+reproduces the \(N_q\), mean \(N_e\) and standard deviation that NEST returns
+to \(0.002\%\), \(0.003\%\) and \(0.54\%\), and the variance and skew-normal
+placement match the source line for line. And the apparent symmetry of the
+published band about its median is an artefact of the logarithmic axis: in
+\(N_e\) both bands are positively skewed, with
+\((N_{90}-N_{50})/(N_{50}-N_{10})\) rising with \(\mathrm{S1c}\) in each, so
+the skewness treatment is not a separate discrepancy from the width.
+
+The scripts, the digitised curves and a fuller account are in the archive, as
+\texttt{analysis/band.py} and \texttt{notes/band-reconstruction.md}.
+
+\bibliographystyle{JHEP}
+\bibliography{LZ}
+
+\end{document}

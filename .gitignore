@@ -1,0 +1,107 @@
+# ---------------------------------------------------------------- LaTeX build
+# paper/ is compiled in place; keep only the sources and the figure PDFs.
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.vrb
+*.xdv
+*.run.xml
+*.bcf
+*.dvi
+*.ps
+*.spl
+*.auxlock
+*.figlist
+*.makefile
+*.pre
+*.upa
+*.upb
+# latexmk / arara / tectonic scratch
+.latexmk/
+_minted*/
+*.pythontex
+pythontex-files-*/
+# the compiled article itself -- regenerate it, do not track it.
+# (the three figure PDFs ARE tracked; they are inputs, see below)
+paper/main.pdf
+
+# --------------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# ------------------------------------------------------------------- C++/NEST
+# NEST is a dependency, not vendored. If you clone it here, do not track it.
+nest/
+NEST/
+build/
+*.o
+*.so
+*.a
+*.d
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+# the built drivers
+nest-drivers/lz_scan
+nest-drivers/lz_scan_s1s2
+nest-drivers/lz_tail_test
+nest-drivers/out
+
+# ----------------------------------------------------------- scan intermediates
+# run_scan24.sh writes one file per job before concatenating. Keep the merged
+# scan24_results.txt; drop the per-seed pieces and logs.
+scan/part_*.txt
+scan/*.part
+scan/*.log
+scan/joblist*.txt
+nohup.out
+
+# ------------------------------------------------------- figures: what to keep
+# Tracked:   the three PDFs used by the manuscript, in paper/
+# Untracked: PNG previews and digitisation overlays, which regenerate in seconds
+*.png
+!spectra/*_check.png          # except the digitisation overlays, which are
+                              # evidence that the traces match the source figures
+
+# ------------------------------------------------------------------ editor/OS
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ------------------------------------------------------------------- scratch
+scratch/
+tmp/
+*.bak
+*.orig
+*.rej

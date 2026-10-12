@@ -1,0 +1,15 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+Applies to the tabulated data produced by the authors:
+
+    scan/scan24_results.txt              NEST scan output
+    spectra/*.csv                        digitised beta spectra
+    spectra/*_check.png                  digitisation overlays
+    analysis/band_published.csv          digitised ER band of Fig. 2
+
+The digitised files are derived measurements read off published figures by the
+authors. They are NOT the original authors' data, and the underlying
+calculations and figures remain the property of their publishers; see
+spectra/PROVENANCE.md and notes/band-reconstruction.md. Anyone needing the
+underlying values should obtain them from the cited papers.
