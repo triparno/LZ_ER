@@ -3,28 +3,41 @@
 \usepackage{amsmath,amssymb,booktabs,graphicx,siunitx}
 \usepackage[T1]{fontenc}
 \usepackage[dvipsnames]{xcolor}
-% natbib must precede hyperref, and cleveref must follow it
-\usepackage[numbers,sort&compress]{natbib}
+\usepackage[numbers,sort&compress]{natbib} 
 \usepackage{hyperref}
-\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
-\usepackage{cleveref}
-% one spelling of the electron-equivalent unit throughout
-\newcommand{\keVee}{\ensuremath{\mathrm{keV_{ee}}}}
+\hypersetup{%
+colorlinks=true,
+linkcolor=blue!50!black, 
+citecolor=blue!50!black, 
+urlcolor=blue!50!black,
+pdftitle={The Electron-Recoil Response Tail and the LZ High-Energy Event Background},
+pdfauthor={Triparno Bandyopadhyay,Rajarajeswari Ramasamy,Nishitha TP},
+pdfsubject={Background Uncertainty in LZ result of one anomalous event that is interpreted as Dark Matter},
+pdfkeywords={LZ, Dark Matter, Electron Recoil},
+pdflang={en},
+pdfproducer={LaTeX with hyperref},
+pdfcreator={pdflatex}
+} 
+\usepackage[nameinlink]{cleveref}
+\usepackage{orcidlink}
+\newcommand{\keVee}{\ensuremath{\mathrm{keV_{ee}}}} 
 \usepackage{authblk}
 
-\author[1]{Triparno Bandyopadhyay}
-\author[2]{Rajarajeswari Ramasamy}
-\author[2]{Nishitha TP}
+\author[1]{Triparno
+Bandyopadhyay\,\orcidlink{0000-0002-6744-8972}\thanks{\href{gondogolegogol@gmail.com}{\texttt{gondogolegogol@gmail.com}}}}
+\author[2]{Rajarajeswari
+Ramasamy\,\orcidlink{0009-0004-8452-6751}\thanks{\href{rajarajeswari.r.work@gmail.com}{\texttt{rajarajeswari.r.work@gmail.com}}}}
+\author[2]{Nishitha
+TP\,\orcidlink{0009-0005-8208-0976}\thanks{\href{nishitha.tp2001@gmail.com}{\texttt{nishitha.tp2001@gmail.com}}}}
 
-\affil[1]{Nayanta University, Bavdhan, Pune 411021, Maharashtra, India. }
+\affil[1]{Nayanta University, Pune 411021, Maharashtra, India. }
 \affil[2]{Department of Physics and Nanotechnology, SRM Institute of
 Science and Technology, Kattankulathur, Tamil Nadu 603203, India.}
 
 
-\title{\bfseries The Electron-Recoil Response Tail and the\\
-LZ High-Energy Event Background}
-%\author{}
-\date{12 October 2026}
+\title{\bfseries The Electron-Recoil Response Tail and the\\ LZ
+High-Energy Event Background} 
+\date{\today}
 
 \begin{document}
 \maketitle
@@ -46,13 +59,13 @@ the negligible range, and one agreeing to 0.47\% makes it comparable to
 the entire background quoted for the comparison region. The released
 model does predict a definite tail; what the published characterisation
 does not supply is any bound on how far the true one may depart from it.
-We identify the measurements that would settle it.
+We go on to identify the measurements that would settle it.
 \end{abstract}
 
 \section{Introduction}%
 \label{sec:intro}
 
-The LUX-ZEPLIN (LZ) Collaboration has reported one event in a
+The LUX-ZEPLIN (LZ) Collaboration~\cite{LZ:2019sgr} has reported one event in a
 2.84~tonne-year exposure consistent with a \(248\pm23\,\mathrm{stat}
 \pm23\,\mathrm{sys}\)~keV nuclear recoil, at \(\mathrm{S1c}=540.1\)~phd
 and \(\mathrm{S2c}=9268\)~phd~\cite{LZ:2026axp} (the LZ paper is from
@@ -85,7 +98,7 @@ excess~\cite{Freese:2026mfi,Anwar:2026ffj,Pradhan:2026inq,%
 	CentellesChulia:2026ats,Dutra:2026fng,Pallis:2026jdc,Jodlowski:2026wjx,%
 	Oliveira:2026jtn,Das:2026jsq,Kumar:2026kfe,Bozorgnia:2026emp,Chanda:2026wdl,%
 	Jho:2026zzj,Jho:2026cso,Luengas:2026tlf,Shaikh:2026ldo,Meissner:2026ooy,%
-Roy:2026wzb,Jones-Perez:2026lmw,Choudhury:2026qjz,Hor:2026voa,}. An
+Roy:2026wzb,Jones-Perez:2026lmw,Choudhury:2026qjz,Hor:2026voa}. An
 expectation of that size is a statement about the far tail of a response
 distribution, and this paper asks what the published information
 determines about it.
@@ -191,7 +204,7 @@ and if the response differed from this one the quantitative reconstruction
 of \cref{sec:leak} would change---though the identifiability result of
 \cref{sec:family} would not, since it needs only some definite response to
 deform. The driver, scan and analysis scripts are archived at
-DOI~\textsc{10.5281/zenodo.23318901}~\cite{Archive}, as described in the
+DOI~\textsc{\href{https://zenodo.org/records/23318901}{10.5281/zenodo.23318901}}~\cite{Archive}, as described in the
 code and data availability statement below. \end{sloppypar}
 
 Three distinct regions appear throughout the analysis. The \emph{WS RoI}
@@ -202,8 +215,14 @@ where no other region is in play; regions belonging to other analyses
 are named explicitly. The \emph{comparison region} is the
 \(500<\mathrm{S1c}<600\)~phd subset of the WS RoI shown in the lower
 panel of Fig.~5 of the Letter, for which the expectation
-\(0.0106\pm0.0008\) counts is quoted; the event lies here. The
-\emph{parent window} is the range of ER parent energies able to satisfy
+\(0.0106\pm0.0008\) counts is quoted; the event lies here. That panel
+carries no label of its own: the figure is stated to cover three
+\(\mathrm{S1c}\) ranges, the upper two are marked
+\(\mathrm{S1c}<250\)~phd and \(250<\mathrm{S1c}<500\)~phd, and the WS
+RoI ends at \(600\)~phd, so the lower panel is
+\(500<\mathrm{S1c}<600\)~phd. We read it that way throughout, and note
+that it is an inference from those three facts rather than a printed
+range. The \emph{parent window} is the range of ER parent energies able to satisfy
 the comparison region's requirements at all,
 \(61.3<E<79.1\)~\keVee, derived in \cref{sec:leak}.
 
@@ -339,10 +358,9 @@ where the simulated points are used they are written
     P(E)\;&=\;K\left[\Phi_{\rm sn}\!\left(N_e^{\rm hi}\right) 
         - \Phi_\mathrm{sn}\!\left(N_e^\mathrm{lo}\right)\right]\,, \qquad
     \Phi_\mathrm{sn}(x)=\Phi(z)-2\,T(z,\alpha),\qquad
-    z=\frac{x-\xi}{\omega_\mathrm{sn}},
+    z=\frac{x-\xi}{\omega_\mathrm{sn}}.
 \end{align}
-\Cref{eq:5a}
-inverts the standard skew-normal moment relations and \cref{eq:5b}
+\Cref{eq:5a} inverts the standard skew-normal moment relations and \cref{eq:5b}
 uses its distribution function, both due to
 Azzalini~\cite{Azzalini}. The integration limits carry both RoI
 conditions: the S2c ceiling and the S1c window to give
@@ -370,8 +388,7 @@ counts. A single overall normalisation describes the whole range. Write
 \(p_i\) for the analytic probability at the \(i\)th scan point,
 evaluated at unit normalisation from the mean, standard deviation, and
 standardised skewness that NEST returned there, and \(T_i\) for the
-number of trials---not to be confused with \(N_i\), the electron--ion
-pair count of \cref{eq:e5}. The leakage counts are Poisson,
+number of trials. The leakage counts are Poisson,
 \(n_i\sim\mathrm{Pois}(K\,p_iT_i)\), so the maximum-likelihood estimate
 of \(K\) is closed-form, \(\hat{K}=\sum_i n_i\big/\sum_i p_iT_i\). It
 gives 
@@ -532,7 +549,7 @@ deviation, the S2c ceiling lies at a displacement
 \end{align}
 from the mean. At the event-conditioned energy this is \(4.1\sigma\).
 
-That displacement should be read against the range over which the
+The displacement should be read against the range over which the
 response model was tuned. The caption of Fig.~2 of the
 Letter~\cite{LZ:2026axp} identifies its grey points as those ``outside
 of \(4\sigma\) from the mean of the ER and NR bands'' and states that
@@ -779,7 +796,7 @@ the ratio of the largest to the smallest entry in each row.
 
 
 Three families spanning two construction mechanisms therefore
-agree within a factor of about two at matched agreement with the
+align within a factor of about two at matched agreement with the
 quantile shift, while all give ratios of order \(10^2\) at sub-percent
 agreement. Across the three families tested the relationship between
 quantile agreement and tail ratio is approximately family-independent,
@@ -870,9 +887,7 @@ population there is a continuum; the interval at issue lies several
 standard deviations below that bulk while remaining far above the
 displacement at which the leakage probability is defined. An observation
 over such an interval separates only models differing by orders of
-magnitude more than these do. This, however, does not weaken the
-Letter's argument as stated: it means the argument constrains the tail
-once the tail is known, which is the question at issue.
+magnitude more than these do.
 
 
 \section{The electron-recoil contribution to the expected background}%
@@ -940,7 +955,9 @@ SR1 WIMP search region \(^{214}\)Pb\(\,:\,^{212}\)Pb\(\,:\,^{85}\)Kr
 internal-\(\beta\) events of Table~I of the Letter. The counts
 themselves are not transported: Ref.~\cite{Bkg} reports the first
 science run at 193~V/cm over 60 live days, whereas the Letter reports
-220 live days at 96.5~V/cm, so the absolute rates differ while the
+220 live days, at the \(96.5\)~V/cm of the released
+configuration~\cite{Recomb}; the Letter does not itself state the drift
+field of this exposure. The absolute rates therefore differ while the
 relative composition of the radon chains and \(^{85}\)Kr is expected to
 be stable. The remaining components are taken directly from Table~I of
 the Letter; ``\(\nu\)~ER'' denotes elastic scattering of solar neutrinos
@@ -955,7 +972,7 @@ column; the \(1713\pm39\) printed at the foot of the table is the
 the figure a reconstruction of the expectation should be compared with.
 The residual is therefore \(59.9\) counts, of which \(0.2\) are the
 nuclear-recoil entries, atmospheric and \(^{8}\)B neutrinos and MSSI,
-which are not electron recoils at all. The remaining \(59.7\) are
+which are not part of the \(\beta\)-continuum parent population we reconstruct. The remaining \(59.7\) are
 electron-recoil components, and it is worth saying what they are and why
 they are not folded in. Three are line sources outside the window or at
 its edge: \(^{83m}\)Kr (\(17.1\) counts, at \(41.5\)~keV) and
@@ -1033,7 +1050,7 @@ already falling, and its ratio is 0.72. The \(^{136}\)Xe component is
 not a \(\beta\) decay but a two-neutrino double-\(\beta\) spectrum peaking near
 \SI{700}{keV}; its ratio is 7.49 and it supplies a third of the total
 window rate from \(110\) events, under seven per cent of the \(1647\)
-electron recoils of Table~I\@. It is listed separately there and is not
+counts the six rows below carry\@. It is listed separately there and is not
 part of the \(1341\) internal-\(\beta\) events, which the
 \(^{214}\)Pb\,:\,\(^{212}\)Pb\,:\,\(^{85}\)Kr split of
 \(164{:}18{:}32\) exhausts exactly. We evaluate its summed-electron
@@ -1061,7 +1078,7 @@ the same way, and the floor is the more delicate of the two.
 
 The ceiling follows from
 solving \(Q_y(E)\,E=409\) with the tuned charge-yield model. The floor
-cannot: below about \(1\)~\keVee that parametrisation returns more
+cannot: below about \(1\)~\keVee\ that parametrisation returns more
 electrons than there are ions, exceeding the no-recombination ceiling
 \(Q_y^{\max}=1/[W(1+N_{ex}/N_i)]=62.6\)~e\(^-\)/keV, and in any case the
 WS RoI is three cuts rather than one. Taking \(\mathrm{S1c}>3\)~phd and
@@ -1075,7 +1092,7 @@ treatments span \(2.2\%\) in the acceptance width, which is contained in
 the \(20\%\) we assign to \(\mathrm{d}N/\mathrm{d}E\). The derivation is
 given in \texttt{notes/acceptance-floor.md} of the archive.
 
-One assumption cannot be tested externally. Ratios of counts to rates
+There is one assumption that cannot be tested externally. Ratios of counts to rates
 presume that the electron-recoil selection efficiency is the same in the
 RoI interval 0.62--\(20.02\)~\keVee\ as in the parent window
 61--\(79\)~\keVee. The efficiency against energy for this analysis is
@@ -1162,7 +1179,7 @@ displacement the leakage responds steeply to the response parameters:
     \frac{\partial\ln P}{\partial\gamma_\mathrm{ER}}=-5.8\;,
 \end{align}
 both approximately constant in energy across
-45--\(110\)~\keVee (\cref{fig:f2}, right panel).
+45--\(110\)~\keVee\ (\cref{fig:f2}, right panel).
 The response is strongly non-linear in the size of the perturbation.
 Write \(\epsilon\) for a fractional variation in \(\sigma_{N_e}\), so
 that \(\sigma_{N_e}\to\sigma_{N_e}(1+\epsilon)\), and let
@@ -1253,7 +1270,7 @@ component stops being a small correction to it.
 \section{What would determine the response tail}
 \label{sec:settle}
 
-What would settle the question this paper raises is a measured response
+What would settle the question this paper raises is a measurement of the response
 distribution. The families of \cref{sec:family} are separated by their
 shape at a displacement of \(4.1\) standard deviations, not by their
 first three moments, which they share; the quantity that discriminates
@@ -1666,23 +1683,25 @@ include throughout.
 \section*{Code and data availability}
 
 All code and derived data needed to reproduce the results of this paper
-are archived at Zenodo under DOI~\textsc{10.5281/zenodo.23318901}, with
-the development repository at~[\url{https://github.com/triparno/LZ_ER}].
-The archive contains the C++ drivers that instantiate the LZ detector
-configuration and call the NEST yield and quanta routines; the parallel
-scan script and its output, the \(1.1\times10^{10}\)-event scan of
-\cref{sec:recon}, which is the only result here that is not regenerable
-in minutes; the Python scripts that construct the distribution families
-of \cref{sec:family}, perform the leakage and threshold calculations,
-and produce every figure; the digitised \(\beta\) spectra used in
-\cref{sec:leak}, together with the extraction scripts, so that the
-digitisation of the published figures of Ref.~\cite{BetaShapes} is
-itself checkable; and the working notes, which are referred to at
-several points above and carry calculations omitted from the text. These
-are \texttt{notes/acceptance-floor.md}, the derivation of the low-energy
-edge of the acceptance; \texttt{notes/double-vacancy.md}, \(^{124}\)Xe
-and \(^{125}\)I estimates for the double-vacancy population discussed in
-\cref{sec:intro}, which are not reproduced in the text; and
+are archived at Zenodo under
+DOI~\textsc{\href{https://zenodo.org/records/23318901}{10.5281/zenodo.23318901}},
+with the development repository
+at~[\url{https://github.com/triparno/LZ_ER}]. The archive contains the
+C++ drivers that instantiate the LZ detector configuration and call the
+NEST yield and quanta routines; the parallel scan script and its output,
+the \(1.1\times10^{10}\)-event scan of \cref{sec:recon}, which is the
+only result here that is not regenerable in minutes; the Python scripts
+that construct the distribution families of \cref{sec:family}, perform
+the leakage and threshold calculations, and produce every figure; the
+digitised \(\beta\) spectra used in \cref{sec:leak}, together with the
+extraction scripts, so that the digitisation of the published figures of
+Ref.~\cite{BetaShapes} is itself checkable; and the working notes, which
+are referred to at several points above and carry calculations omitted
+from the text. These are \texttt{notes/acceptance-floor.md}, the
+derivation of the low-energy edge of the acceptance;
+\texttt{notes/double-vacancy.md}, \(^{124}\)Xe and \(^{125}\)I estimates
+for the double-vacancy population discussed in \cref{sec:intro}, which
+are not reproduced in the text; and
 \texttt{notes/band-reconstruction.md}, which records an attempt to
 reconstruct the band of Fig.~2 of the Letter from the released
 configuration, the respects in which it did not succeed, and why we
