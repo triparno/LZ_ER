@@ -14,9 +14,10 @@ is reproduced verbatim and carries no normalisation factor, which is what the
 factor of 1.475 rests on; Table S4's eight parameters and Table S3's ten match
 response.py term for term, including the m6 = 0 that the released
 configuration contradicts; the WS RoI bounds and the event's S1c and S2c
-match; and Fig. 5's bottom panel is 500 < S1c < 600 phd, so the 0.0106 the
-thresholds are expressed against is the total background of the same region
-the paper computes in.
+match; and Fig. 5's bottom panel is 500 < S1c < 600 phd in v1 -- the figure
+states three S1c ranges, the upper two are labelled and the RoI ends at 600 --
+so the 0.0106 the thresholds are expressed against is the total background of
+the same region the paper computes in.
 
 ## Dependencies
 
@@ -57,19 +58,22 @@ disagrees. Nothing here needs NEST -- the scan output is committed. Twenty
 checks (seventeen plus three figures), of which five can fail rather than
 merely compute:
 
-  check_manuscript.py reads paper/main.tex and paper/supplementary.tex, pulls
-  every table and the headline scalars out of them, recomputes each from the
-  code, and tests whether the printed number is the correctly rounded form of
-  the computed one. 129 values: the family table including the event-density
-  column, the matched alpha values, the response at the event, the threshold
-  ladder, the empty-interval table, the measured smearing factor, the
-  calibration-size table of Sec. 5 with the two entries the summary repeats,
-  the cross-family comparison table of Sec. 3, the window-weighted ratios, the
-  Table I accounting, the appendix's OldW13eV figures, and the double-vacancy
-  table of Sec. S4. A row edited by hand and not regenerated is caught here,
-  which is what it exists for. It is the only check that reads the manuscript
-  rather than keeping its own copy of the numbers, which is why it is the
-  authority when it and leakage.py disagree.
+  check_manuscript.py reads paper/main.tex, and supplementary.tex either
+  beside it or in notes/, pulls every table and the headline scalars out of
+  them, recomputes each from the code, and tests whether the printed number is
+  the correctly rounded form of the computed one. 130 values: the family table
+  including the event-density column, the matched alpha values, the response at
+  the event, the threshold ladder, the empty-interval table, the measured
+  smearing factor, the calibration-size table of Sec. 5 with the entry the
+  summary repeats, the cross-family comparison table of Sec. 3, the
+  window-weighted ratios, the Table I accounting, the appendix's OldW13eV
+  figures, and the double-vacancy table of Sec. S4. A row edited by hand and
+  not regenerated is caught here, which is what it exists for. It is the only
+  check that reads the manuscript rather than keeping its own copy of the
+  numbers, which is why it is the authority when it and leakage.py disagree.
+  Each value is located by a pattern keyed to the manuscript's wording, so a
+  pattern that no longer matches is itself reported as a failure: rewording a
+  sentence cannot quietly stop its value being tested.
 
   leakage.py recomputes the 61 values quoted in the prose of Sec. 4 and
   prints each beside its counterpart in the text.
@@ -159,8 +163,9 @@ member). Only the scan in step 1 requires hours.
     OldW13eV         acts through gamma_ER alone, 1.89 -> 2.29, leakage / 10.3
     event density    R_ev = 49 (kappa 1.8) to 7.0e3 (kappa 1.4), ~10x steeper
                      than the integrated ratio R
-    Table I          the six rows cover 1646.9 of the 1706.8 expected counts;
-                     the residual is 59.9, of which 59.7 is ER and 0.2 NR
+    Table I          the six spectral components carry 1646.9 of the 1706.8
+                     expected counts; the 59.9 omitted are 59.7 ER and 0.2 NR,
+                     and the thirteen rows close on 1706.8 exactly
     smearing         MEASURED N_leak x1.172 (counts 1.18 +- 0.10); modelled
                      ratio compression 7-13%; thresholds move < 0.01 in kappa
     S1c/S2c indices  s1c_idx = 5, s2c_idx = 7 at commit 541b643

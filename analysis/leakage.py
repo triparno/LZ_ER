@@ -137,11 +137,12 @@ for nm, N in comp:
           % (nm, N, N/ACC, R[nm], w))
 chk('total dN/dE [per keVee]', tot, _R.DNDE, tol=0.003)
 
-# Table I coverage. The EXPECTED column, which is the one to compare a
-# reconstruction against: Table I's printed total of 1713 is the FIT column
-# and carries the fitted 1.0-count WIMP besides, so comparing an expected
-# subtotal against it overstates the residual by six counts. Holding the whole
-# table here forces the enumeration in Sec. 4 to balance against it.
+# Table I coverage. The EXPECTED column is the one to compare a reconstruction
+# against. Table I's printed total of 1713 is the post-fit column, which the
+# fit raises above the 1706.8 the expected column sums to, so comparing an
+# expected subtotal against 1713 overstates the omitted counts by six. Holding
+# the whole table here forces the enumeration in Sec. 4 to balance against the
+# expected total.
 TABLE_I = {                      # expected events, Table I of the Letter
     'Internal beta': 1341.0, 'nu ER': 140.6, '136Xe': 110.0, 'CH3T & 14C': 55.3,
     '124Xe': 21.0, '83mKr': 17.1, '125I': 8.9, 'Detector ERs': 8.5,
@@ -153,15 +154,15 @@ NRLIKE     = ('Atmospheric nu', '8B+hep nu', 'MSSI')
 COVERED    = sum(N for _, N in comp)
 EXPECTED   = sum(TABLE_I.values())
 chk('Table I expected total', EXPECTED, 1706.8, tol=0.001)
-chk('  covered by the six rows', COVERED, 1646.9, tol=0.001)
-chk('  residual against it', EXPECTED-COVERED, 59.9, tol=0.01)
+chk('  carried by the six components', COVERED, 1646.9, tol=0.001)
+chk('  omitted from the reconstruction', EXPECTED-COVERED, 59.9, tol=0.01)
 chk('  the ER components Sec. 4 enumerates',
     sum(TABLE_I[k] for k in ENUMERATED), 59.7, tol=0.01)
 chk('  the NR remainder', sum(TABLE_I[k] for k in NRLIKE), 0.17, tol=0.05)
-# the enumeration must close: covered + enumerated + NR = expected total
+# the enumeration must close: carried + enumerated + NR = expected total
 _gap = EXPECTED - COVERED - sum(TABLE_I[k] for k in ENUMERATED) \
                           - sum(TABLE_I[k] for k in NRLIKE)
-chk('  enumeration closes (residual gap)', _gap, 0.0, tol=1e-9)
+chk('  the thirteen rows close exactly', _gap, 0.0, tol=1e-9)
 
 # The CH3T/14C bound. Table I combines CH3T and 14C in one 55.3-count entry
 # and gives no split; tritium's endpoint is 18.6 keV, so it contributes nothing

@@ -5,11 +5,14 @@ half: it reads ../paper/main.tex, pulls the tables and the headline scalars out
 of it, recomputes each, and reports any that disagree. Every table in the paper
 is covered, so a row edited by hand and not regenerated is caught here.
 
+The double-vacancy table of Sec. S4 is read from supplementary.tex, looked for
+first beside the main.tex given and then at ../notes/supplementary.tex.
+
 Exit status is non-zero if anything disagrees.
 
     cd analysis && python check_manuscript.py [../paper/main.tex]
 """
-import sys, re
+import sys, re, os
 import numpy as np
 from math import sqrt, pi, log
 sys.path.insert(0, '.')
@@ -50,6 +53,19 @@ def chk(label, got, tex_str, tol=0.0):
     if not ok: FAIL.append('%s (computed %.6g, tex %s)' % (label, got, tex_str.strip()))
     print('  %-50s %-12s tex %-12s %s'
           % (label, '%.5g' % got, tex_str.strip()[:12], 'ok' if ok else '** MISMATCH'))
+
+def find(pat, lbl, text=None, flags=0):
+    """re.search, with a miss recorded as a failure rather than printed as a note.
+
+    Every pattern here is keyed to the manuscript's wording, so rewording a
+    sentence stops its value being tested while everything else still passes.
+    A pattern that no longer matches is therefore a failure of this script, not
+    an absent check: the number it guarded is no longer guarded."""
+    m = re.search(pat, tex if text is None else text, flags)
+    if m is None:
+        FAIL.append('%s: pattern no longer matches the manuscript' % lbl)
+        print('  ** %-50s pattern no longer matches' % lbl)
+    return m
 
 def num(x):
     """'\\(4.31\\times10^{-10}\\)' or '0.22\\%' or '1.4' -> float.
@@ -120,14 +136,12 @@ else:
 
 # --------------------------------------------------------- the alpha list
 print('\n=== Sec. 3, the matched alpha values ===')
-m = re.search(r'\\alpha=\\\{([\d.,]+)\\\}', tex)
+m = find(r'\\alpha=\\\{([\d.,]+)\\\}', 'alpha list')
 if m:
     want = [x for x in m.group(1).split(',')]
     for k, w in zip((2.3,2.2,2.0,1.8,1.7,1.6,1.4), want):
         chk('alpha at kappa = %.1f' % k, member(k)[0], w)
-else:
-    FAIL.append('alpha list not found'); print('  ** alpha list not found')
-m = re.search(r'\\gamma_1\(\\alpha\)=([\d.]+)', tex)
+m = find(r'\\gamma_1\(\\alpha\)=([\d.]+)', 'target standardised skewness')
 if m: chk('target standardised skewness', R.SK, m.group(1))
 
 # --------------------------------------------------- Sec. 2 response scalars
@@ -136,7 +150,7 @@ pairs = [(r'\\sigma_{N_e}=([\d.]+)\\\)~e\\\(\^-\\\), and it is', R.SD, 'sigma_Ne
          (r'N_q\\;=\\;N_\{ph\}\+N_e\\;=\\;(\d+)', R.NQ, 'N_q', 0.001),
          (r'returns\s*\\\(\\omega=([\d.]+)\\\)', R.omega(R.NQ, True), 'omega printed', 0.005),
          (r'is therefore \\\(([\d.]+)\\\), and', R.omega(R.NQ,True)/R.omega(R.NQ), 'omega ratio', 0.002),
-         (r'gives \\\(\\delta=([\d.]+)\\\)', R.GAM/sqrt(1+R.GAM**2), 'delta', 0.0),
+         (r'gives\s+\\\(\\delta=([\d.]+)\\\)', R.GAM/sqrt(1+R.GAM**2), 'delta', 0.0),
          (r'\\omega_\\mathrm{sn}=([\d.]+)\\\) and', R.SD/sqrt(1-2*(R.GAM/sqrt(1+R.GAM**2))**2/pi), 'omega_sn', 0.0),
          (r'\\\(\\xi=([\d.]+)\\\)~e', R.MU-(R.SD/sqrt(1-2*(R.GAM/sqrt(1+R.GAM**2))**2/pi))*(R.GAM/sqrt(1+R.GAM**2))*sqrt(2/pi), 'xi', 0.0),
          (r'returns \\\(P=([\d.]+)\\times10\^\{-7\}\\\)', 1e7*R.PREF, 'P at the event [1e-7]', 0.0),
@@ -144,9 +158,8 @@ pairs = [(r'\\sigma_{N_e}=([\d.]+)\\\)~e\\\(\^-\\\), and it is', R.SD, 'sigma_Ne
          (r'K\\;&=\\;([\d.]+)\\pm', R.K, 'K', 0.0),
          (r'K\\;&=\\;[\d.]+\\pm([\d.]+)', R.DK, 'K uncertainty', 0.0)]
 for pat, got, lbl, tol in pairs:
-    m = re.search(pat, tex)
+    m = find(pat, lbl)
     if m: chk(lbl, got, m.group(1))
-    else: print('  (%s not located in the tex)' % lbl)
 
 # ------------------------------------------------------- the threshold ladder
 print('\n=== Sec. 4, the threshold ladder ===')
@@ -158,9 +171,9 @@ LADDER = ((r'^\\\(1\\%\\\) of the quoted total', 0.01*TOTBKG, '1% of the quoted 
           (r'^the quoted total',                     TOTBKG,      'the quoted total'),
           (r'^\\\(0\.1\\\) counts',                0.1,         '0.1 counts'))
 for pat, tgt, lbl in LADDER:
-    m = re.search(pat + r'\s*&\s*([\d.]+)\s*&\s*\\\(([\d.]+)\\%\\\)', tex, re.M)
-    if not m:
-        print('  (row "%s" not located)' % lbl); continue
+    m = find(pat + r'\s*&\s*([\d.]+)\s*&\s*\\\(([\d.]+)\\%\\\)',
+             'ladder row "%s"' % lbl, flags=re.M)
+    if not m: continue
     k = brentq(lambda x: nleak(x)-tgt, 1.2, 2.4)
     chk('kappa at %s' % lbl, k, m.group(1))
     chk('  its quantile shift [pct]', 100*qshift(k), m.group(2))
@@ -171,21 +184,23 @@ try:
     import gap as G
     grows = re.findall(r'^(?:2\.0 \(NEST\)|1\.[4-8]) & ([\d.]+) & ([\d.]+)\\\\', tex, re.M)
     ks = (2.0, 1.8, 1.7, 1.6, 1.5, 1.4)
-    if len(grows) == len(ks):
+    if len(grows) != len(ks):
+        FAIL.append('gap table: %d rows parsed, expected %d' % (len(grows), len(ks)))
+        print('  ** gap table: %d rows parsed, expected %d' % (len(grows), len(ks)))
+    else:
         for k, (c, p) in zip(ks, grows):
             n = G.counts(k, G.NE_EV, G.NE_ED)
             chk('kappa %.1f  expected counts in the gap' % k, n, c)
-    else:
-        print('  (gap table: %d rows parsed, expected %d)' % (len(grows), len(ks)))
 except Exception as e:
-    print('  (gap.py not evaluated: %s)' % e)
+    FAIL.append('empty-interval table not evaluated')
+    print('  ** gap.py not evaluated: %s' % e)
 
 # --------------------------------------------- the measured smearing factor
 print('\n=== Sec. 4, the measured smearing factor ===')
-m = re.search(r'\\mathrm\{d\}E\}\;&=\;([\d.]+)\\,', tex)
 try:
     d = np.genfromtxt('../scan/scan24_smeared.txt', names=True, comments='#')
     f = trapezoid(d['P_win_s'], d['E'])/trapezoid(d['P_win'], d['E'])
+    m = find(r'\\mathrm\{d\}E\}\\;&=\\;([\d.]+)\\,', 'measured window integral ratio')
     if m: chk('window integral ratio, measured', f, m.group(1))
     arch = trapezoid(d['P_win'], d['E'])
     chk('its quanta-level integral vs the archived value', arch, '1.497\\times10^{-6}')
@@ -195,22 +210,21 @@ except OSError:
 # ------------------------------------------ Sec. 4, the Table I accounting
 print('\n=== Sec. 4, the Table I accounting ===')
 for pat, got, lbl in (
-    (r'account for \\\(([\d.]+)\\\) of the', 1646.9, 'covered by the six rows'),
-    (r'of the \\\(([\d.]+)\\\) expected', 1706.8, 'Table I expected total'),
-    (r'residual is therefore \\\(([\d.]+)\\\) counts', 59.9, 'residual'),
-    (r'which \\\(([\d.]+)\\\) are the\s*\n?nuclear-recoil', 0.172, 'NR remainder'),
-    (r'The remaining \\\(([\d.]+)\\\) are', 59.7, 'ER components enumerated'),
+    (r'below carry\s+\\\(([\d.]+)\\\)\s+of the', 1646.9, 'carried by the six components'),
+    (r'of the\s+\\\(([\d.]+)\\\)\s+expected', 1706.8, 'Table I expected total'),
+    (r'The\s+\\\(([\d.]+)\\\)\s+counts this reconstruction omits', 59.9, 'omitted'),
+    (r'Of them,\s+\\\(([\d.]+)\\\)\s+are the\s+nuclear-recoil', 0.172, 'NR remainder'),
+    (r'The\s+other\s+\\\(([\d.]+)\\\)\s+are electron-recoil', 59.7, 'ER components enumerated'),
     (r'from \\\(123.2\\\) to \\\(([\d.]+)\\\) per', 121.2, 'all-tritium bound')):
-    m = re.search(pat, tex)
+    m = find(pat, lbl)
     if m: chk(lbl, got, m.group(1))
-    else: print('  (%s not located in the tex)' % lbl)
 
 # -------------------------------- Sec. 3, the window-weighted ratio comparison
 print('\n=== Sec. 3, the window-weighted ratios ===')
 try:
     import window_ratio as WR
     from scipy.integrate import trapezoid as _tz
-    m = re.search(r'are \\\((.+?)\\\) against single-energy', tex)
+    m = find(r'are \\\((.+?)\\\) against single-energy', 'window-weighted list')
     if m:
         I0 = _tz([WR.P_at(e, 2.0) for e in WR.EGRID], WR.EGRID)
         want = [x.strip() for x in m.group(1).split(',')]
@@ -222,8 +236,6 @@ try:
             for k, w in zip(WR.KAPPAS, want):
                 Ik = _tz([WR.P_at(e, k) for e in WR.EGRID], WR.EGRID)
                 chk('window-weighted ratio at kappa = %.1f' % k, Ik/I0, w)
-    else:
-        print('  (window-weighted list not located in the tex)')
 except Exception as e:
     FAIL.append('Sec. 3 window-weighted ratios not evaluated')
     print('  ** window_ratio.py not evaluated: %s' % e)
@@ -243,9 +255,8 @@ try:
          'measured in NEST'),
         (r'leakage spans a factor of (\d+) over', WV.span,
          'span over gamma_ER in [1.55, 2.25]')):
-        m = re.search(pat, tex)
+        m = find(pat, lbl)
         if m: chk(lbl, got, m.group(1))
-        else: print('  (%s not located in the tex)' % lbl)
 except Exception as e:
     FAIL.append('appendix OldW13eV figures not evaluated')
     print('  ** wvalue.py not evaluated: %s' % e)
@@ -290,14 +301,12 @@ try:
             chk('kappa %.2f  N for 3 sigma'   % k, D.n_for(3, d_fit),   r0[1])
             chk('kappa %.2f  N for 5 sigma'   % k, D.n_for(5, d_fit),   r0[2])
             chk('kappa %.2f  N, bulk only'    % k, D.n_for(3, d_fit_b), r0[3])
-        # the same two numbers repeated in the summary, which is where they drift
-        for pat, k, lbl in ((r'standard deviations by \\\((.+?)\\\) events', 1.66,
-                             'summary: N at the quoted-total shape'),
-                            (r'a tenth of that background by\s*\n?\\\((.+?)\\\);', 1.87,
-                             'summary: N at the tenth-of-total shape')):
-            m = re.search(pat, tex)
-            if m: chk(lbl, D.n_for(3, got[k][2]), m.group(1))
-            else: print('  (%s not located)' % lbl)
+        # the tenth-of-total figure is repeated in the summary, which is where a
+        # table value drifts from the prose that quotes it
+        m = find(r'most\s+expensive:\s+\\\((.+?)\\\) events at three standard',
+                 'summary: N at the tenth-of-total shape')
+        if m: chk('summary: N at the tenth-of-total shape',
+                  D.n_for(3, got[1.87][2]), m.group(1))
 except Exception as e:
     FAIL.append('Sec. 5 table not evaluated')
     print('  ** discriminate.py not evaluated: %s' % e)
@@ -305,9 +314,10 @@ except Exception as e:
 # ------------------------------------- the Supplement's double-vacancy table
 print('\n=== Sec. S4, the double-vacancy modes (supplementary.tex) ===')
 try:
-    import os
-    SUP = os.path.join(os.path.dirname(os.path.abspath(TEX)), 'supplementary.tex')
+    _sib = os.path.join(os.path.dirname(os.path.abspath(TEX)), 'supplementary.tex')
+    SUP = _sib if os.path.exists(_sib) else os.path.join('..', 'notes', 'supplementary.tex')
     sup = open(SUP).read()
+    print('  (read %s)' % SUP)
     import double_vacancy as DV
     srows = re.findall(r'^([KLM]) & ([\d.]+) & (\d+) & +(\d+) & ([\d.]+) & '
                        r'(.+?)\\\\\s*$', sup, re.M)

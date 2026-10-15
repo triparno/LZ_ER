@@ -24,11 +24,11 @@ pdfcreator={pdflatex}
 \usepackage{authblk}
 
 \author[1]{Triparno
-Bandyopadhyay\,\orcidlink{0000-0002-6744-8972}\thanks{\href{gondogolegogol@gmail.com}{\texttt{gondogolegogol@gmail.com}}}}
+Bandyopadhyay\,\orcidlink{0000-0002-6744-8972}\thanks{\href{mailto:gondogolegogol@gmail.com}{\texttt{gondogolegogol@gmail.com}}}}
 \author[2]{Rajarajeswari
-Ramasamy\,\orcidlink{0009-0004-8452-6751}\thanks{\href{rajarajeswari.r.work@gmail.com}{\texttt{rajarajeswari.r.work@gmail.com}}}}
+Ramasamy\,\orcidlink{0009-0004-8452-6751}\thanks{\href{mailto:rajarajeswari.r.work@gmail.com}{\texttt{rajarajeswari.r.work@gmail.com}}}}
 \author[2]{Nishitha
-TP\,\orcidlink{0009-0005-8208-0976}\thanks{\href{nishitha.tp2001@gmail.com}{\texttt{nishitha.tp2001@gmail.com}}}}
+TP\,\orcidlink{0009-0005-8208-0976}\thanks{\href{mailto:nishitha.tp2001@gmail.com}{\texttt{nishitha.tp2001@gmail.com}}}}
 
 \affil[1]{Nayanta University, Pune 411021, Maharashtra, India. }
 \affil[2]{Department of Physics and Nanotechnology, SRM Institute of
@@ -216,15 +216,14 @@ are named explicitly. The \emph{comparison region} is the
 \(500<\mathrm{S1c}<600\)~phd subset of the WS RoI shown in the lower
 panel of Fig.~5 of the Letter, for which the expectation
 \(0.0106\pm0.0008\) counts is quoted; the event lies here. That panel
-carries no label of its own: the figure is stated to cover three
-\(\mathrm{S1c}\) ranges, the upper two are marked
+carries no label of its own in v1 of the Letter: the figure is stated to
+cover three \(\mathrm{S1c}\) ranges, the upper two are marked
 \(\mathrm{S1c}<250\)~phd and \(250<\mathrm{S1c}<500\)~phd, and the WS
 RoI ends at \(600\)~phd, so the lower panel is
-\(500<\mathrm{S1c}<600\)~phd. We read it that way throughout, and note
-that it is an inference from those three facts rather than a printed
-range. The \emph{parent window} is the range of ER parent energies able to satisfy
-the comparison region's requirements at all,
-\(61.3<E<79.1\)~\keVee, derived in \cref{sec:leak}.
+\(500<\mathrm{S1c}<600\)~phd. We read it that way throughout.  The
+\emph{parent window} is the range of ER parent energies able to satisfy
+the comparison region's requirements at all, \(61.3<E<79.1\)~\keVee,
+derived in \cref{sec:leak}.
 
 Two derived energies recur which are not cuts. The first is
 \(20.02\)~\keVee, the parent energy at which an electron recoil with
@@ -965,34 +964,36 @@ on atomic electrons, whose recoil spectrum is flat to better than a
 percent across both intervals. The digitised spectra used here are
 provided in the archive~\cite{Archive}.
 
-The six rows below account for \(1646.9\) of the \(1706.8\) expected
-counts of Table~I of the Letter. That total is the sum of the expected
-column; the \(1713\pm39\) printed at the foot of the table is the
-\emph{fitted} total and carries the fitted signal besides, so it is not
-the figure a reconstruction of the expectation should be compared with.
-The residual is therefore \(59.9\) counts, of which \(0.2\) are the
-nuclear-recoil entries, atmospheric and \(^{8}\)B neutrinos and MSSI,
-which are not part of the \(\beta\)-continuum parent population we reconstruct. The remaining \(59.7\) are
-electron-recoil components, and it is worth saying what they are and why
-they are not folded in. Three are line sources outside the window or at
-its edge: \(^{83m}\)Kr (\(17.1\) counts, at \(41.5\)~keV) and
-\(^{127}\)Xe\,\(+\,^{125}\)Xe (\(1.5\)) lie below it, and accidental
-coincidences (\(2.7\)) are not a parent spectrum at all but a pairing of
-unrelated \(\mathrm{S1}\) and \(\mathrm{S2}\) pulses, which the present
-construction cannot treat. Detector ERs (\(8.5\)) are a \(\gamma\)
-continuum whose shape in the window we have no published spectrum for;
-at half a per cent of the total they are inside the uncertainty assigned
-below. The remaining two are \(^{124}\)Xe (\(21.0\)) and \(^{125}\)I
-(\(8.9\)), whose double-vacancy modes release \(64.3\) and \(67.3\)~keV
-and therefore fall \emph{inside} the parent window. These are precisely
-the components for which the Letter records an unpropagated
-tail-projection systematic, and their charge yield is suppressed
-relative to a \(\beta\) decay of the same energy by an amount that
-Ref.~\cite{Recomb} measures for single-vacancy captures and for the
-\(^{124}\)Xe LL mode but not for the KK mode at \(64.3\)~keV. Because
-the leakage of a monoenergetic line depends on that suppression through
-the exponential tail of the response, a quantitative estimate would rest
-entirely on an extrapolation. We therefore exclude them and record that
+The six rows below carry \(1646.9\) of the \(1706.8\) expected counts of
+Table~I of the Letter. That total is the sum of the expected column, on
+which the thirteen rows of the table close exactly; the \(1713\pm39\)
+printed at the foot is the post-fit total, which the fit raises above
+the expectation, so it is not the figure a reconstruction of the
+expectation should be compared with. The \(59.9\) counts this
+reconstruction omits are likewise all accounted for in the table, and it
+is worth saying what they are and why. Of them, \(0.2\) are the
+nuclear-recoil entries---atmospheric and \(^{8}\)B neutrinos and
+MSSI---which are not part of the \(\beta\)-continuum parent population
+we reconstruct. The other \(59.7\) are electron-recoil components. Three
+are line sources outside the window or at its edge: \(^{83m}\)Kr
+(\(17.1\) counts, at \(41.5\)~keV) and \(^{127}\)Xe\,\(+\,^{125}\)Xe
+(\(1.5\)) lie below it, and accidental coincidences (\(2.7\)) are not a
+parent spectrum at all but a pairing of unrelated \(\mathrm{S1}\) and
+\(\mathrm{S2}\) pulses, which the present construction cannot treat.
+Detector ERs (\(8.5\)) are a \(\gamma\) continuum whose shape in the
+window we have no published spectrum for; at half a per cent of the
+total they are inside the uncertainty assigned below. The remaining two
+are \(^{124}\)Xe (\(21.0\)) and \(^{125}\)I (\(8.9\)), whose
+double-vacancy modes release \(64.3\) and \(67.3\)~keV and therefore
+fall \emph{inside} the parent window. These are precisely the components
+for which the Letter records an unpropagated tail-projection systematic,
+and their charge yield is suppressed relative to a \(\beta\) decay of
+the same energy by an amount that Ref.~\cite{Recomb} measures for
+single-vacancy captures and for the \(^{124}\)Xe LL mode but not for the
+KK mode at \(64.3\)~keV. Because the leakage of a monoenergetic line
+depends on that suppression through the exponential tail of the
+response, a quantitative estimate would rest entirely on an
+extrapolation. We therefore exclude them and record that
 \(N^\mathrm{ER}_\mathrm{leak}\) below is the continuum contribution
 only.
 
@@ -1305,16 +1306,16 @@ D(q\,\|\,p)=\int q\,\ln\!\frac{q}{p}\,\mathrm{d}N_e ,
 \label{eq:asimov}
 \end{align}
 
-\noindent which is the asymptotic non-centrality of the likelihood-ratio
-statistic for \(N\) events drawn from \(q\) and fitted to \(\hat
-p\)~\cite{Wilks,Asimov}, evaluated on the Asimov dataset in the sense of
-Ref.~\cite{Asimov},
-with \(N\) the number of calibration events in a slice at fixed \(N_q\)
-and \(\hat{p}\) the implemented response at its best-fitting moments.
-The moments are free because a calibration determines them from the same
-events that must supply the shape; the members share them exactly by
-construction, so the fit begins at the truth, but it is not obliged to
-stay there.
+\noindent where \(D(q\,\|\,p)\) is the Kullback--Leibler
+divergence~\cite{Kullback:1951}. The expression is the asymptotic
+non-centrality of the likelihood-ratio statistic for \(N\) events drawn
+from \(q\) and fitted to \(\hat p\)~\cite{Wilks,Asimov}, evaluated on
+the Asimov dataset in the sense of Ref.~\cite{Asimov}, with \(N\) the
+number of calibration events in a slice at fixed \(N_q\) and \(\hat{p}\)
+the implemented response at its best-fitting moments. The moments are
+free because a calibration determines them from the same events that
+must supply the shape; the members share them exactly by construction,
+so the fit begins at the truth, but it is not obliged to stay there.
 
 The prescription is the following, and the code is in the
 archive~\cite{Archive}. Both \(q\) and \(\hat p\) are continuous
